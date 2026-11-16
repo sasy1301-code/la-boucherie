@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>מכונת המזל של לה בוצרי</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -10,13 +10,15 @@
 <style>
 :root{--gold:#d4a437;--gold2:#f5d06f;--cream:#f6ebd9}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;font-family:Rubik,Arial,sans-serif;color:var(--cream);user-select:none;-webkit-user-select:none}
+html{background:#0c0102}
+body{position:fixed;inset:0;}
+html,body{height:100%;overflow:hidden;overscroll-behavior:none;font-family:Rubik,Arial,sans-serif;color:var(--cream);user-select:none;-webkit-user-select:none}
 body{background:radial-gradient(ellipse 60% 50% at 50% 45%,#2a0508 0%,#120204 60%,#0c0102 100%)}
 img{display:block;-webkit-user-drag:none;pointer-events:none}
 #bg,#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
 #fx{z-index:80}
 /* design canvas = the mockup, 1086×1448 */
-#scaler{position:absolute;left:50%;top:50%;width:1086px;height:1448px;transform:translate(-50%,-50%)}
+#scaler{position:absolute;left:0;top:0;width:1086px;height:1448px;transform-origin:0 0}
 #shaker{position:absolute;inset:0}
 #shaker.shake{animation:shake .6s cubic-bezier(.36,.07,.19,.97)}
 @keyframes shake{10%,90%{transform:translate(-5px,2px)}20%,80%{transform:translate(10px,-4px)}30%,50%,70%{transform:translate(-16px,6px)}40%,60%{transform:translate(16px,-6px)}}
@@ -81,17 +83,18 @@ img{display:block;-webkit-user-drag:none;pointer-events:none}
 #play.wait,#play.empty{filter:saturate(.45) brightness(.82)}
 #play.wait::after,#play.empty::after{display:none}
 
-#toast{position:absolute;left:540px;top:760px;transform:translate(-50%,24px);z-index:9;opacity:0;transition:.35s;white-space:nowrap;background:rgba(10,4,2,.92);border:4px solid var(--gold);border-radius:40px;padding:14px 36px;font-weight:700;font-size:34px;color:var(--gold2);box-shadow:0 10px 40px rgba(0,0,0,.7)}
+#toast{position:absolute;left:575px;top:760px;transform:translate(-50%,24px);z-index:9;opacity:0;transition:.35s;white-space:nowrap;background:rgba(10,4,2,.92);border:4px solid var(--gold);border-radius:40px;padding:14px 36px;font-weight:700;font-size:34px;color:var(--gold2);box-shadow:0 10px 40px rgba(0,0,0,.7)}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 /* small game UI in the empty corners */
-.rbtn{position:absolute;width:128px;height:128px;border:none;background:none;padding:0;cursor:pointer;z-index:9;border-radius:50%;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55));transition:transform .08s,filter .2s}
+#bar{position:fixed;left:0;right:0;bottom:0;height:calc(var(--barh,96px) + env(safe-area-inset-bottom));padding-bottom:env(safe-area-inset-bottom);display:flex;align-items:center;justify-content:center;gap:var(--gap,12px);z-index:20;background:linear-gradient(rgba(12,1,2,0),rgba(12,1,2,.75) 35%)}
+.rbtn{position:relative;flex:none;width:var(--bs,64px);height:var(--bs,64px);border:none;background:none;padding:0;cursor:pointer;z-index:9;border-radius:50%;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55));transition:transform .08s,filter .2s}
 .rbtn img{width:100%;height:100%}
 .rbtn:active{transform:translateY(5px) scale(.97)}
 .rbtn.off{filter:grayscale(.75) brightness(.7) drop-shadow(0 8px 10px rgba(0,0,0,.55))}
-.rbtn.off::after{content:"";position:absolute;left:50%;top:14%;width:9px;height:72%;margin-left:-4.5px;border-radius:5px;background:linear-gradient(#ff5a4a,#b3121b);box-shadow:0 0 0 3px rgba(60,0,0,.6);transform:rotate(45deg)}
-#spinsPill{position:absolute;right:14px;top:1332px;width:234px;height:89px;z-index:9;filter:drop-shadow(0 8px 10px rgba(0,0,0,.55))}
+.rbtn.off::after{content:"";position:absolute;left:50%;top:14%;width:5px;height:72%;margin-left:-4.5px;border-radius:5px;background:linear-gradient(#ff5a4a,#b3121b);box-shadow:0 0 0 3px rgba(60,0,0,.6);transform:rotate(45deg)}
+#spinsPill{position:relative;flex:none;width:calc(var(--bs,64px)*2.55);height:calc(var(--bs,64px)*.97);filter:drop-shadow(0 8px 10px rgba(0,0,0,.55))}
 #spinsPill img{width:100%;height:100%}
-#spinsPill .val{position:absolute;left:16%;top:46%;transform:translate(-50%,-50%);font:900 46px/1 Rubik,Arial;color:#fbecd0;text-shadow:0 2px 0 #b98a4a,0 4px 0 #5a2a08,0 6px 8px rgba(0,0,0,.5)}
+#spinsPill .val{position:absolute;left:16%;top:46%;transform:translate(-50%,-50%);font:900 calc(var(--bs,64px)*.42)/1 Rubik,Arial;color:#fbecd0;text-shadow:0 2px 0 #b98a4a,0 4px 0 #5a2a08,0 6px 8px rgba(0,0,0,.5)}
 .bump{animation:bump .4s}
 @keyframes bump{40%{transform:scale(1.4)}}
 
@@ -234,12 +237,16 @@ img{display:block;-webkit-user-drag:none;pointer-events:none}
  <div id="leverWrap" title="משיכה"><img id="lever" alt=""></div>
  <button id="play" aria-label="שחק"><img id="btnImg" alt=""><div class="cap"><b id="capLbl">עצור</b><small id="capSub">לחצו לעצירה</small></div></button>
  <div id="toast"></div>
- <button class="rbtn" id="btnPrizes" style="left:18px;top:1176px" aria-label="פרסים"><img id="imgPrizes" alt=""></button>
- <button class="rbtn" id="btnReset" style="left:18px;top:1306px" aria-label="איפוס"><img id="imgReset" alt=""></button>
- <button class="rbtn" id="btnMusic" style="left:940px;top:1058px" aria-label="מוזיקה"><img id="imgMusic" alt=""></button>
- <button class="rbtn" id="btnSound" style="left:940px;top:1188px" aria-label="צליל"><img id="imgSound" alt=""></button>
- <div id="spinsPill"><img id="imgSpins" alt=""><span class="val" id="spins">5</span></div>
+ 
 </div></div></div></div>
+
+<div id="bar">
+ <button class="rbtn" id="btnPrizes" aria-label="פרסים"><img id="imgPrizes" alt=""></button>
+ <button class="rbtn" id="btnReset" aria-label="איפוס"><img id="imgReset" alt=""></button>
+ <div id="spinsPill"><img id="imgSpins" alt=""><span class="val" id="spins">5</span></div>
+ <button class="rbtn" id="btnMusic" aria-label="מוזיקה"><img id="imgMusic" alt=""></button>
+ <button class="rbtn" id="btnSound" aria-label="צליל"><img id="imgSound" alt=""></button>
+</div>
 
 <div id="splash"><canvas id="wfx"></canvas><div id="wscaler">
  <img id="wbase" alt="מכונת המזל – לה בוצ׳רי. עוצרים את הגלגלים, שלושה מוצרים זהים בשורה = זכייה!">
@@ -310,9 +317,19 @@ const rand = () => { try { return crypto.getRandomValues(new Uint32Array(1))[0] 
 const pick = arr => arr[Math.floor(rand()*arr.length)];
 let DS = 1, S = 1;   // DS = design scale; S = effects scale
 function fit(){
-  DS = Math.min(innerWidth/1086, innerHeight/1448);
+  const W=innerWidth, H=innerHeight;
+  const barH=Math.round(Math.max(70, Math.min(104, W*0.21)));            // bottom button strip
+  const bs=Math.round(Math.min(barH*0.78, (W-24)/7.3));                  // button size so 4 circles + pill fit
+  document.documentElement.style.setProperty('--barh',barH+'px'); document.documentElement.style.setProperty('--bs',bs+'px');
+  document.documentElement.style.setProperty('--gap',Math.round(bs*0.16)+'px');
+  const availH=H-barH;
+  // the machine itself spans x≈150…1000 of the 1086px design: on narrow screens use that width and trim the empty sides
+  const full=Math.min(W/1086, availH/1448), crop=Math.min(W/880, availH/1440);
+  DS = crop>full ? crop : full;
+  const cx = crop>full ? 575 : 543;
   S = DS*1086/440;
-  $('scaler').style.transform = `translate(-50%,-50%) scale(${DS})`;
+  const tx=W/2-cx*DS, ty=Math.max(0,(availH-1448*DS)/2);
+  $('scaler').style.transform = `translate(${tx}px,${ty}px) scale(${DS})`;
   const WS=Math.min(innerWidth/1122, innerHeight/1402); $('wscaler').style.setProperty('--ws',WS); $('winScaler').style.setProperty('--ws',WS); $('wscaler').style.transform=`translate(-50%,-50%) scale(${WS})`;
   resizeCanvases();
 }
